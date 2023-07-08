@@ -1,0 +1,509 @@
+TOPDIR ?= $(CURDIR)
+
+APP_TITLE	:=	Eldritch
+
+TARGET		:=	$(notdir $(CURDIR))
+BUILD		:=	build
+#~ SOURCES		:=	Libraries/Core/src/TinyXML/ \
+#~ 	Libraries/Core/src/
+
+SOURCEFILES	:=	Vita/sha1.cpp \
+Libraries/Core/src/TinyXML/tinyxml.cpp \
+Libraries/Core/src/TinyXML/tinyxmlerror.cpp \
+Libraries/Core/src/TinyXML/tinyxmlparser.cpp \
+Libraries/Core/src/allocator.cpp \
+Libraries/Core/src/allocatorchunk.cpp \
+Libraries/Core/src/bufferedfilestream.cpp \
+Libraries/Core/src/checksum.cpp \
+Libraries/Core/src/clock.cpp \
+Libraries/Core/src/configmanager.cpp \
+Libraries/Core/src/configparser.cpp \
+Libraries/Core/src/configvar.cpp \
+Libraries/Core/src/customassert.cpp \
+Libraries/Core/src/customnew.cpp \
+Libraries/Core/src/datapipe.cpp \
+Libraries/Core/src/display.cpp \
+Libraries/Core/src/dynamicmemorystream.cpp \
+Libraries/Core/src/filestream.cpp \
+Libraries/Core/src/fileutil.cpp \
+Libraries/Core/src/hashedstring.cpp \
+Libraries/Core/src/inputcontext.cpp \
+Libraries/Core/src/inputsystem.cpp \
+Libraries/Core/src/keyboard.cpp \
+Libraries/Core/src/memorystream.cpp \
+Libraries/Core/src/mouse.cpp \
+Libraries/Core/src/packstream.cpp \
+Libraries/Core/src/printmanager.cpp \
+Libraries/Core/src/profiler.cpp \
+Libraries/Core/src/profilerhook.cpp \
+Libraries/Core/src/profilertable.cpp \
+Libraries/Core/src/reversehash.cpp \
+Libraries/Core/src/simplestring.cpp \
+Libraries/Core/src/stopwatch.cpp \
+Libraries/Core/src/stringmanager.cpp \
+Libraries/Core/src/test.cpp \
+Libraries/Core/src/timedate.cpp \
+Libraries/Core/src/timer.cpp \
+Libraries/Core/src/windowwrapper.cpp \
+Libraries/Core/src/xinputcontroller.cpp \
+\
+Libraries/Math/src/aabb.cpp \
+Libraries/Math/src/angles.cpp \
+Libraries/Math/src/box2d.cpp \
+Libraries/Math/src/collisioninfo.cpp \
+Libraries/Math/src/collisioninfo2d.cpp \
+Libraries/Math/src/convexhull.cpp \
+Libraries/Math/src/crypto.cpp \
+Libraries/Math/src/cylinder.cpp \
+Libraries/Math/src/ellipsoid.cpp \
+Libraries/Math/src/frustum.cpp \
+Libraries/Math/src/hsv.cpp \
+Libraries/Math/src/line.cpp \
+Libraries/Math/src/mathfunc.cpp \
+Libraries/Math/src/matrix.cpp \
+Libraries/Math/src/noise.cpp \
+Libraries/Math/src/plane.cpp \
+Libraries/Math/src/quat.cpp \
+Libraries/Math/src/random.cpp \
+Libraries/Math/src/ray.cpp \
+Libraries/Math/src/segment.cpp \
+Libraries/Math/src/segment2d.cpp \
+Libraries/Math/src/sphere.cpp \
+Libraries/Math/src/triangle.cpp \
+Libraries/Math/src/triangle2d.cpp \
+Libraries/Math/src/vector.cpp \
+Libraries/Math/src/vector2.cpp \
+Libraries/Math/src/vector4.cpp \
+\
+Libraries/3D/src/3d.cpp \
+Libraries/3D/src/GL2/gl2cubemap.cpp \
+Libraries/3D/src/GL2/gl2cuberendertarget.cpp \
+Libraries/3D/src/GL2/gl2indexbuffer.cpp \
+Libraries/3D/src/GL2/gl2pixelshader.cpp \
+Libraries/3D/src/GL2/gl2renderer.cpp \
+Libraries/3D/src/GL2/gl2rendertarget.cpp \
+Libraries/3D/src/GL2/gl2shaderprogram.cpp \
+Libraries/3D/src/GL2/gl2texture.cpp \
+Libraries/3D/src/GL2/gl2vertexbuffer.cpp \
+Libraries/3D/src/GL2/gl2vertexdeclaration.cpp \
+Libraries/3D/src/GL2/gl2vertexshader.cpp \
+Libraries/3D/src/GL2/util.cpp \
+Libraries/3D/src/SDPs/sdpbase.cpp \
+Libraries/3D/src/animation.cpp \
+Libraries/3D/src/animationstate.cpp \
+Libraries/3D/src/animevent.cpp \
+Libraries/3D/src/animeventfactory.cpp \
+Libraries/3D/src/bonearray.cpp \
+Libraries/3D/src/bucket.cpp \
+Libraries/3D/src/cubemapcommon.cpp \
+Libraries/3D/src/dynamicmeshmanager.cpp \
+Libraries/3D/src/font.cpp \
+Libraries/3D/src/fontmanager.cpp \
+Libraries/3D/src/linebatcher.cpp \
+Libraries/3D/src/material.cpp \
+Libraries/3D/src/mesh.cpp \
+Libraries/3D/src/meshfactory.cpp \
+Libraries/3D/src/renderercommon.cpp \
+Libraries/3D/src/renderstates.cpp \
+Libraries/3D/src/sdpfactory.cpp \
+Libraries/3D/src/sectorbound.cpp \
+Libraries/3D/src/shaderdataprovider.cpp \
+Libraries/3D/src/shadermanager.cpp \
+Libraries/3D/src/surface.cpp \
+Libraries/3D/src/texturecommon.cpp \
+Libraries/3D/src/texturemanager.cpp \
+Libraries/3D/src/tga.cpp \
+Libraries/3D/src/vertexdeclarationmanager.cpp \
+Libraries/3D/src/view.cpp \
+\
+Libraries/SoLoud/src/backend/vita/soloud_vita.cpp \
+Libraries/SoLoud/src/core/soloud.cpp \
+Libraries/SoLoud/src/core/soloud_audiosource.cpp \
+Libraries/SoLoud/src/core/soloud_bus.cpp \
+Libraries/SoLoud/src/core/soloud_core_3d.cpp \
+Libraries/SoLoud/src/core/soloud_core_basicops.cpp \
+Libraries/SoLoud/src/core/soloud_core_faderops.cpp \
+Libraries/SoLoud/src/core/soloud_core_filterops.cpp \
+Libraries/SoLoud/src/core/soloud_core_getters.cpp \
+Libraries/SoLoud/src/core/soloud_core_setters.cpp \
+Libraries/SoLoud/src/core/soloud_core_voicegroup.cpp \
+Libraries/SoLoud/src/core/soloud_core_voiceops.cpp \
+Libraries/SoLoud/src/core/soloud_fader.cpp \
+Libraries/SoLoud/src/core/soloud_fft.cpp \
+Libraries/SoLoud/src/core/soloud_fft_lut.cpp \
+Libraries/SoLoud/src/core/soloud_file.cpp \
+Libraries/SoLoud/src/core/soloud_filter.cpp \
+Libraries/SoLoud/src/core/soloud_thread.cpp \
+Libraries/SoLoud/src/filter/soloud_bassboostfilter.cpp \
+Libraries/SoLoud/src/filter/soloud_biquadresonantfilter.cpp \
+Libraries/SoLoud/src/filter/soloud_dcremovalfilter.cpp \
+Libraries/SoLoud/src/filter/soloud_echofilter.cpp \
+Libraries/SoLoud/src/filter/soloud_fftfilter.cpp \
+Libraries/SoLoud/src/filter/soloud_flangerfilter.cpp \
+Libraries/SoLoud/src/filter/soloud_lofifilter.cpp \
+Libraries/SoLoud/src/audiosource/wav/soloud_wav.cpp \
+Libraries/SoLoud/src/audiosource/wav/soloud_wavstream.cpp \
+Libraries/Audio/src/audio.cpp \
+Libraries/Audio/src/audiosystemcommon.cpp \
+Libraries/Audio/src/soloudaudiosystem.cpp \
+Libraries/Audio/src/soloudsound.cpp \
+Libraries/Audio/src/soloudsoundinstance.cpp \
+Libraries/Audio/src/sound3dlistener.cpp \
+Libraries/Audio/src/soundcommon.cpp \
+Libraries/Audio/src/soundinstancecommon.cpp \
+Libraries/Audio/src/soundmanager.cpp \
+\
+Libraries/Workbench/src/Actions/wbactioncomposite.cpp \
+Libraries/Workbench/src/Actions/wbactiondestroy.cpp \
+Libraries/Workbench/src/Actions/wbactionlog.cpp \
+Libraries/Workbench/src/Actions/wbactionselector.cpp \
+Libraries/Workbench/src/Actions/wbactionsendevent.cpp \
+Libraries/Workbench/src/Actions/wbactionsetconfigvar.cpp \
+Libraries/Workbench/src/Actions/wbactionsetstate.cpp \
+Libraries/Workbench/src/Actions/wbactionsetvariable.cpp \
+Libraries/Workbench/src/Actions/wbactiontriggerstatmod.cpp \
+Libraries/Workbench/src/Actions/wbactionunqueueevent.cpp \
+Libraries/Workbench/src/Components/wbcomplabel.cpp \
+Libraries/Workbench/src/Components/wbcompowner.cpp \
+Libraries/Workbench/src/Components/wbcomppemap.cpp \
+Libraries/Workbench/src/Components/wbcompreactions.cpp \
+Libraries/Workbench/src/Components/wbcompstate.cpp \
+Libraries/Workbench/src/Components/wbcompstatmod.cpp \
+Libraries/Workbench/src/Components/wbcomptransform.cpp \
+Libraries/Workbench/src/Components/wbcompvariablemap.cpp \
+Libraries/Workbench/src/PEs/wbpeabs.cpp \
+Libraries/Workbench/src/PEs/wbpeadd.cpp \
+Libraries/Workbench/src/PEs/wbpeand.cpp \
+Libraries/Workbench/src/PEs/wbpebinaryop.cpp \
+Libraries/Workbench/src/PEs/wbpeconditional.cpp \
+Libraries/Workbench/src/PEs/wbpeconstantangles.cpp \
+Libraries/Workbench/src/PEs/wbpeconstantbool.cpp \
+Libraries/Workbench/src/PEs/wbpeconstantfloat.cpp \
+Libraries/Workbench/src/PEs/wbpeconstantint.cpp \
+Libraries/Workbench/src/PEs/wbpeconstantstring.cpp \
+Libraries/Workbench/src/PEs/wbpeconstantvector.cpp \
+Libraries/Workbench/src/PEs/wbpecross.cpp \
+Libraries/Workbench/src/PEs/wbpediv.cpp \
+Libraries/Workbench/src/PEs/wbpedot.cpp \
+Libraries/Workbench/src/PEs/wbpegetconfigvar.cpp \
+Libraries/Workbench/src/PEs/wbpegetentitybylabel.cpp \
+Libraries/Workbench/src/PEs/wbpegetname.cpp \
+Libraries/Workbench/src/PEs/wbpegetstate.cpp \
+Libraries/Workbench/src/PEs/wbpegetvariable.cpp \
+Libraries/Workbench/src/PEs/wbpeisstate.cpp \
+Libraries/Workbench/src/PEs/wbpelength.cpp \
+Libraries/Workbench/src/PEs/wbpelookup.cpp \
+Libraries/Workbench/src/PEs/wbpemax.cpp \
+Libraries/Workbench/src/PEs/wbpemin.cpp \
+Libraries/Workbench/src/PEs/wbpemul.cpp \
+Libraries/Workbench/src/PEs/wbpeneg.cpp \
+Libraries/Workbench/src/PEs/wbpenormal.cpp \
+Libraries/Workbench/src/PEs/wbpenot.cpp \
+Libraries/Workbench/src/PEs/wbpenull.cpp \
+Libraries/Workbench/src/PEs/wbpeor.cpp \
+Libraries/Workbench/src/PEs/wbpeowner.cpp \
+Libraries/Workbench/src/PEs/wbpepow.cpp \
+Libraries/Workbench/src/PEs/wbpepushcontext.cpp \
+Libraries/Workbench/src/PEs/wbpequeryactionstack.cpp \
+Libraries/Workbench/src/PEs/wbperandombool.cpp \
+Libraries/Workbench/src/PEs/wbperandomfloat.cpp \
+Libraries/Workbench/src/PEs/wbperandomint.cpp \
+Libraries/Workbench/src/PEs/wbperandomvector.cpp \
+Libraries/Workbench/src/PEs/wbpereactionsself.cpp \
+Libraries/Workbench/src/PEs/wbpesaturate.cpp \
+Libraries/Workbench/src/PEs/wbpeselector.cpp \
+Libraries/Workbench/src/PEs/wbpeself.cpp \
+Libraries/Workbench/src/PEs/wbpesquare.cpp \
+Libraries/Workbench/src/PEs/wbpestatmod.cpp \
+Libraries/Workbench/src/PEs/wbpesub.cpp \
+Libraries/Workbench/src/PEs/wbpeunaryop.cpp \
+Libraries/Workbench/src/PEs/wbpexor.cpp \
+Libraries/Workbench/src/wbaction.cpp \
+Libraries/Workbench/src/wbactionfactory.cpp \
+Libraries/Workbench/src/wbactionstack.cpp \
+Libraries/Workbench/src/wbcomponent.cpp \
+Libraries/Workbench/src/wbcomponentarrays.cpp \
+Libraries/Workbench/src/wbentity.cpp \
+Libraries/Workbench/src/wbevent.cpp \
+Libraries/Workbench/src/wbeventmanager.cpp \
+Libraries/Workbench/src/wbparamevaluator.cpp \
+Libraries/Workbench/src/wbparamevaluatorfactory.cpp \
+Libraries/Workbench/src/wbpatternmatching.cpp \
+Libraries/Workbench/src/wbpe.cpp \
+Libraries/Workbench/src/wbrule.cpp \
+Libraries/Workbench/src/wbscene.cpp \
+Libraries/Workbench/src/wbworld.cpp \
+\
+Libraries/Rodin/src/Actions/wbactionrodinblackboardwrite.cpp \
+Libraries/Rodin/src/BTNodes/rodinbtnodeactiondecorator.cpp \
+Libraries/Rodin/src/BTNodes/rodinbtnodeblackboardwrite.cpp \
+Libraries/Rodin/src/BTNodes/rodinbtnodecastresult.cpp \
+Libraries/Rodin/src/BTNodes/rodinbtnodecomposite.cpp \
+Libraries/Rodin/src/BTNodes/rodinbtnodecompositesingular.cpp \
+Libraries/Rodin/src/BTNodes/rodinbtnodeconditionpe.cpp \
+Libraries/Rodin/src/BTNodes/rodinbtnodeconditiontimeout.cpp \
+Libraries/Rodin/src/BTNodes/rodinbtnodedecorator.cpp \
+Libraries/Rodin/src/BTNodes/rodinbtnodelog.cpp \
+Libraries/Rodin/src/BTNodes/rodinbtnodelookup.cpp \
+Libraries/Rodin/src/BTNodes/rodinbtnodeloop.cpp \
+Libraries/Rodin/src/BTNodes/rodinbtnodenull.cpp \
+Libraries/Rodin/src/BTNodes/rodinbtnodeparallel.cpp \
+Libraries/Rodin/src/BTNodes/rodinbtnodeplayactions.cpp \
+Libraries/Rodin/src/BTNodes/rodinbtnodeselector.cpp \
+Libraries/Rodin/src/BTNodes/rodinbtnodesendevent.cpp \
+Libraries/Rodin/src/BTNodes/rodinbtnodesequence.cpp \
+Libraries/Rodin/src/BTNodes/rodinbtnodesleep.cpp \
+Libraries/Rodin/src/BTNodes/rodinbtnodetimeout.cpp \
+Libraries/Rodin/src/BTNodes/rodinbtnodeuseresource.cpp \
+Libraries/Rodin/src/BTNodes/rodinbtnodeusestatmod.cpp \
+Libraries/Rodin/src/BTNodes/rodinbtnodewait.cpp \
+Libraries/Rodin/src/BTNodes/rodinbtnodewaitforevent.cpp \
+Libraries/Rodin/src/Components/wbcomprodinbehaviortree.cpp \
+Libraries/Rodin/src/Components/wbcomprodinblackboard.cpp \
+Libraries/Rodin/src/Components/wbcomprodinknowledge.cpp \
+Libraries/Rodin/src/Components/wbcomprodinresourcemap.cpp \
+Libraries/Rodin/src/PEs/wbperodinblackboardget.cpp \
+Libraries/Rodin/src/PEs/wbperodingetknowledge.cpp \
+Libraries/Rodin/src/PEs/wbperodingetlastknownlocation.cpp \
+Libraries/Rodin/src/PEs/wbperodingetlastknowntime.cpp \
+Libraries/Rodin/src/rodinbtnode.cpp \
+Libraries/Rodin/src/rodinbtnodefactory.cpp \
+\
+Libraries/UI/src/Actions/wbactionuipushscreen.cpp \
+Libraries/UI/src/Actions/wbactionuisetwidgetimage.cpp \
+Libraries/UI/src/Actions/wbactionuishowhidewidget.cpp \
+Libraries/UI/src/Actions/wbactionuishowyesnodialog.cpp \
+Libraries/UI/src/Common/uimanagercommon.cpp \
+Libraries/UI/src/Screens/uiscreen-base.cpp \
+Libraries/UI/src/Screens/uiscreen-fade.cpp \
+Libraries/UI/src/Screens/uiscreen-okdialog.cpp \
+Libraries/UI/src/Screens/uiscreen-waitdialog.cpp \
+Libraries/UI/src/Screens/uiscreen-yesnodialog.cpp \
+Libraries/UI/src/Widgets/uiwidget-composite.cpp \
+Libraries/UI/src/Widgets/uiwidget-frame.cpp \
+Libraries/UI/src/Widgets/uiwidget-image.cpp \
+Libraries/UI/src/Widgets/uiwidget-slider.cpp \
+Libraries/UI/src/Widgets/uiwidget-spacer.cpp \
+Libraries/UI/src/Widgets/uiwidget-text.cpp \
+Libraries/UI/src/uifactory.cpp \
+Libraries/UI/src/uimanager.cpp \
+Libraries/UI/src/uiscreen.cpp \
+Libraries/UI/src/uistack.cpp \
+Libraries/UI/src/uiwidget.cpp \
+\
+Libraries/Framework/src/framework3d.cpp \
+Libraries/Framework/src/frameworkutil.cpp \
+Libraries/Framework/src/uiinputmapframework.cpp \
+Libraries/Framework/src/uimanagerframework.cpp \
+\
+Projects/Eld/src/Achievements/achievementmanager_steam.cpp \
+Projects/Eld/src/Actions/wbactioneldaddblock.cpp \
+Projects/Eld/src/Actions/wbactioneldbanktransaction.cpp \
+Projects/Eld/src/Actions/wbactioneldbindinput.cpp \
+Projects/Eld/src/Actions/wbactioneldcheckcone.cpp \
+Projects/Eld/src/Actions/wbactioneldcheckline.cpp \
+Projects/Eld/src/Actions/wbactioneldchecksphere.cpp \
+Projects/Eld/src/Actions/wbactionelddamageworld.cpp \
+Projects/Eld/src/Actions/wbactioneldgiveitem.cpp \
+Projects/Eld/src/Actions/wbactioneldgotolevel.cpp \
+Projects/Eld/src/Actions/wbactioneldlaunchuserid.cpp \
+Projects/Eld/src/Actions/wbactioneldlaunchwebsite.cpp \
+Projects/Eld/src/Actions/wbactioneldopenuserdatapath.cpp \
+Projects/Eld/src/Actions/wbactioneldplayanim.cpp \
+Projects/Eld/src/Actions/wbactioneldplayhandanim.cpp \
+Projects/Eld/src/Actions/wbactioneldpostscore.cpp \
+Projects/Eld/src/Actions/wbactioneldremoveblock.cpp \
+Projects/Eld/src/Actions/wbactioneldsetlight.cpp \
+Projects/Eld/src/Actions/wbactioneldsetpersistentvar.cpp \
+Projects/Eld/src/Actions/wbactioneldshowbook.cpp \
+Projects/Eld/src/Actions/wbactioneldspawnentity.cpp \
+Projects/Eld/src/Actions/wbactioneldstopmotion.cpp \
+Projects/Eld/src/Actions/wbactioneldtweetrip.cpp \
+Projects/Eld/src/Actions/wbactionneonawardachievement.cpp \
+Projects/Eld/src/Actions/wbactionneonincrementstat.cpp \
+Projects/Eld/src/Actions/wbactionneonsetstat.cpp \
+Projects/Eld/src/AnimEvents/animeventeldexecuteaction.cpp \
+Projects/Eld/src/AnimEvents/animeventeldsendevent.cpp \
+Projects/Eld/src/BTNodes/rodinbtnodeeldlookat.cpp \
+Projects/Eld/src/BTNodes/rodinbtnodeeldmoveto.cpp \
+Projects/Eld/src/BTNodes/rodinbtnodeeldplayanim.cpp \
+Projects/Eld/src/BTNodes/rodinbtnodeeldplaybark.cpp \
+Projects/Eld/src/BTNodes/rodinbtnodeeldstopmoving.cpp \
+Projects/Eld/src/BTNodes/rodinbtnodeeldturntoward.cpp \
+Projects/Eld/src/Components/wbcompeldaimotion.cpp \
+Projects/Eld/src/Components/wbcompeldammobag.cpp \
+Projects/Eld/src/Components/wbcompeldanchor.cpp \
+Projects/Eld/src/Components/wbcompeldazathoth.cpp \
+Projects/Eld/src/Components/wbcompeldcamera.cpp \
+Projects/Eld/src/Components/wbcompeldcharacter.cpp \
+Projects/Eld/src/Components/wbcompeldclimbable.cpp \
+Projects/Eld/src/Components/wbcompeldcollision.cpp \
+Projects/Eld/src/Components/wbcompelddamager.cpp \
+Projects/Eld/src/Components/wbcompelddoor.cpp \
+Projects/Eld/src/Components/wbcompelddropshadow.cpp \
+Projects/Eld/src/Components/wbcompeldendgamecounter.cpp \
+Projects/Eld/src/Components/wbcompeldfaction.cpp \
+Projects/Eld/src/Components/wbcompeldfootsteps.cpp \
+Projects/Eld/src/Components/wbcompeldfrobbable.cpp \
+Projects/Eld/src/Components/wbcompeldfrobber.cpp \
+Projects/Eld/src/Components/wbcompeldhands.cpp \
+Projects/Eld/src/Components/wbcompeldhard.cpp \
+Projects/Eld/src/Components/wbcompeldhardlistener.cpp \
+Projects/Eld/src/Components/wbcompeldheadtracker.cpp \
+Projects/Eld/src/Components/wbcompeldhealth.cpp \
+Projects/Eld/src/Components/wbcompeldhudmarker.cpp \
+Projects/Eld/src/Components/wbcompeldicicles.cpp \
+Projects/Eld/src/Components/wbcompeldinventory.cpp \
+Projects/Eld/src/Components/wbcompelditem.cpp \
+Projects/Eld/src/Components/wbcompeldkeyring.cpp \
+Projects/Eld/src/Components/wbcompeldlight.cpp \
+Projects/Eld/src/Components/wbcompeldlock.cpp \
+Projects/Eld/src/Components/wbcompeldmapmarker.cpp \
+Projects/Eld/src/Components/wbcompeldmarkup.cpp \
+Projects/Eld/src/Components/wbcompeldmesh.cpp \
+Projects/Eld/src/Components/wbcompeldminimap.cpp \
+Projects/Eld/src/Components/wbcompeldparticles.cpp \
+Projects/Eld/src/Components/wbcompeldpickup.cpp \
+Projects/Eld/src/Components/wbcompeldplayer.cpp \
+Projects/Eld/src/Components/wbcompeldpowerteleport.cpp \
+Projects/Eld/src/Components/wbcompeldrespawner.cpp \
+Projects/Eld/src/Components/wbcompeldrope.cpp \
+Projects/Eld/src/Components/wbcompeldsensor.cpp \
+Projects/Eld/src/Components/wbcompeldsensordamage.cpp \
+Projects/Eld/src/Components/wbcompeldsensorhearing.cpp \
+Projects/Eld/src/Components/wbcompeldsensormarkup.cpp \
+Projects/Eld/src/Components/wbcompeldsensorpoll.cpp \
+Projects/Eld/src/Components/wbcompeldsensortheft.cpp \
+Projects/Eld/src/Components/wbcompeldsensorvision.cpp \
+Projects/Eld/src/Components/wbcompeldsleeper.cpp \
+Projects/Eld/src/Components/wbcompeldsouls.cpp \
+Projects/Eld/src/Components/wbcompeldsound.cpp \
+Projects/Eld/src/Components/wbcompeldspikes.cpp \
+Projects/Eld/src/Components/wbcompeldthinker.cpp \
+Projects/Eld/src/Components/wbcompeldthinkerhearwormtarget.cpp \
+Projects/Eld/src/Components/wbcompeldthinkerpatrol.cpp \
+Projects/Eld/src/Components/wbcompeldthinkertarget.cpp \
+Projects/Eld/src/Components/wbcompeldtransform.cpp \
+Projects/Eld/src/Components/wbcompeldtrapbolt.cpp \
+Projects/Eld/src/Components/wbcompeldusable.cpp \
+Projects/Eld/src/Components/wbcompeldvisible.cpp \
+Projects/Eld/src/Components/wbcompeldwallet.cpp \
+Projects/Eld/src/Components/wbcompeldwatson.cpp \
+Projects/Eld/src/Components/wbcompeldweapon.cpp \
+Projects/Eld/src/Components/wbcomprodinbehaviortree_debugrender.cpp \
+Projects/Eld/src/Components/wbeldcomponent.cpp \
+Projects/Eld/src/Leaderboards/leaderboards_steam.cpp \
+Projects/Eld/src/PEs/wbpeelddistance.cpp \
+Projects/Eld/src/PEs/wbpeeldgetcharactervo.cpp \
+Projects/Eld/src/PEs/wbpeeldgetfaction.cpp \
+Projects/Eld/src/PEs/wbpeeldgetitem.cpp \
+Projects/Eld/src/PEs/wbpeeldgetlocation.cpp \
+Projects/Eld/src/PEs/wbpeeldgetpersistentvar.cpp \
+Projects/Eld/src/PEs/wbpeeldgetplaytime.cpp \
+Projects/Eld/src/PEs/wbpeeldgetslot.cpp \
+Projects/Eld/src/PEs/wbpeeldgetvelocity.cpp \
+Projects/Eld/src/PEs/wbpeeldhardscalar.cpp \
+Projects/Eld/src/PEs/wbpeeldhardswitch.cpp \
+Projects/Eld/src/PEs/wbpeeldplayer.cpp \
+Projects/Eld/src/SDPs/sdpelddropshadow.cpp \
+Projects/Eld/src/SDPs/sdpeldfxaa.cpp \
+Projects/Eld/src/SDPs/sdpeldhud.cpp \
+Projects/Eld/src/SDPs/sdpeldhudcalibration.cpp \
+Projects/Eld/src/SDPs/sdpeldlit.cpp \
+Projects/Eld/src/SDPs/sdpeldpost.cpp \
+Projects/Eld/src/SDPs/sdpeldworld.cpp \
+Projects/Eld/src/Screens/uiscreen-eldbindinputs.cpp \
+Projects/Eld/src/Screens/uiscreen-eldcredits.cpp \
+Projects/Eld/src/Screens/uiscreen-eldleaderboards.cpp \
+Projects/Eld/src/Screens/uiscreen-eldmirror.cpp \
+Projects/Eld/src/Screens/uiscreen-eldsetres.cpp \
+Projects/Eld/src/eldbank.cpp \
+Projects/Eld/src/eldfactions.cpp \
+Projects/Eld/src/eldframework.cpp \
+Projects/Eld/src/eldgame.cpp \
+Projects/Eld/src/eldirradiance.cpp \
+Projects/Eld/src/eldmesh.cpp \
+Projects/Eld/src/eldmusic.cpp \
+Projects/Eld/src/eldnav.cpp \
+Projects/Eld/src/eldparticles.cpp \
+Projects/Eld/src/eldpersistence.cpp \
+Projects/Eld/src/eldroom.cpp \
+Projects/Eld/src/eldsaveload.cpp \
+Projects/Eld/src/eldsound3dlistener.cpp \
+Projects/Eld/src/eldsurfaces.cpp \
+Projects/Eld/src/eldtargetmanager.cpp \
+Projects/Eld/src/eldtools.cpp \
+Projects/Eld/src/eldwardrobe.cpp \
+Projects/Eld/src/eldwbscenehelpers.cpp \
+Projects/Eld/src/eldworld.cpp \
+Projects/Eld/src/eldworldgen.cpp \
+Projects/Eld/src/exceptionwritesteamminidump.cpp \
+Projects/Eld/src/main.cpp \
+Projects/Eld/src/uiinputmapeld.cpp \
+Libraries/SoLoud/src/audiosource/wav/stb_vorbis.cpp
+
+DATA		:=	data
+INCLUDES	:=	Projects/Eld/src/ \
+				Libraries/Audio/src/ \
+				Libraries/UI/src/ \
+				Libraries/Framework/src/ \
+				Libraries/Core/src/ \
+				Libraries/Math/src \
+				Libraries/3D/src \
+				Libraries/SoLoud/src \
+				Libraries/Rodin/src \
+				Libraries/Workbench/src \
+				Vita
+
+PREFIX  = arm-vita-eabi
+CC      = $(PREFIX)-gcc
+CXX      = $(PREFIX)-g++
+
+export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
+			-I$(CURDIR)/$(BUILD)
+
+CFLAGS	:=	-g -O3 -fno-strict-aliasing -fomit-frame-pointer -ffunction-sections -fno-lto \
+			-Wl,-q,--wrap,fopen,--wrap,sceIoMkdir,--wrap,opendir,--allow-multiple-definition \
+			-DHAVE_GLES $(DEFINES) $(INCLUDE) -fno-optimize-sibling-calls
+
+CFLAGS	+=	$(INCLUDE) -DWITH_VITA_HOMEBREW
+
+CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++11
+
+ASFLAGS	:=	$(CFLAGS)
+
+LIBS	:= -lSDL2 -lvitaGL -lvitashark -lmathneon -lSceShaccCgExt -lSceShaccCg_stub -ltaihen_stub \
+	-lpthread -lSceAudio_stub -lSceAudioIn_stub -lSceHid_stub -lz -lScePower_stub \
+	-lSceAppMgr_stub -lSceCommonDialog_stub -lSceCtrl_stub -lSceGxm_stub -lSceMotion_stub -lSceNet_stub \
+	-lSceTouch_stub -lSceSysmodule_stub -lSceKernelDmacMgr_stub -lSceDisplay_stub -lSceIme_stub
+
+export OUTPUT	:=	$(CURDIR)/$(TARGET)
+export TOPDIR	:=	$(CURDIR)
+
+export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
+			$(foreach sf,$(SOURCEFILES),$(CURDIR)/$(dir $(sf))) \
+			$(foreach dir,$(DATA),$(CURDIR)/$(dir))
+
+export DEPSDIR	:=	$(CURDIR)/$(BUILD)
+
+#~ CFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c))) $(foreach f,$(SOURCEFILES),$(notdir $(f)))
+CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp))) $(foreach f,$(SOURCEFILES),$(notdir $(f)))
+SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
+BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
+
+export OFILES_SRC	:=	$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
+export OFILES 	:= $(OFILES_SRC)
+
+all: $(APP_TITLE).velf
+
+%.velf: %.elf
+	cp $< $<.unstripped.elf
+	$(PREFIX)-strip -g $<
+	vita-elf-create $< $@
+	vita-make-fself -c -s $@ eboot.bin
+
+$(APP_TITLE).elf: $(OFILES)
+	$(CXX) $(CXXFLAGS) $^ $(LIBS) -o $@
+
+clean:
+	@rm -rf $(TARGET).velf $(TARGET).elf  $(OFILES)

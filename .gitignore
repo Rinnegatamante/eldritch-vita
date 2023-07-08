@@ -1,0 +1,8 @@
+build
+*.vpk
+*.bin
+*.elf
+*.velf
+*.sfo
+sce_sys
+*.o
