@@ -1,5 +1,8 @@
-Port of Eldritch for PSVITA based on official source code release with modifications from usineur and ptitSeb that add GLES2 support and other minor bugfixes.
+Port of Eldritch for PSVITA based on official source code release with modifications from [usineur](https://github.com/usineur/Eldritch) and [ptitSeb](https://github.com/ptitSeb/Eldritch) that add GLES2 support and other minor bugfixes.
 Thanks to CatoTheYounger for testing the homebrew.
+
+Notes on compilation:
+vitaGL needs to be compiled with HAVE_GLSL_SUPPORT=1.
 
 Original Readme:
 
