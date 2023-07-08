@@ -37,11 +37,8 @@
 
 #ifdef __vita__
 int _newlib_heap_size_user = 256 * 1024 * 1024;
-
-#include <vitaGL.h>
 #include <cstdio>
 #include <dirent.h>
-#include <sha1.h>
 char patched_fname[256];
 void patch_fname(char *fname) {
 	if (!strncmp(fname, "./", 2)) {

@@ -7,8 +7,7 @@ BUILD		:=	build
 #~ SOURCES		:=	Libraries/Core/src/TinyXML/ \
 #~ 	Libraries/Core/src/
 
-SOURCEFILES	:=	Vita/sha1.cpp \
-Libraries/Core/src/TinyXML/tinyxml.cpp \
+SOURCEFILES	:=	Libraries/Core/src/TinyXML/tinyxml.cpp \
 Libraries/Core/src/TinyXML/tinyxmlerror.cpp \
 Libraries/Core/src/TinyXML/tinyxmlparser.cpp \
 Libraries/Core/src/allocator.cpp \
