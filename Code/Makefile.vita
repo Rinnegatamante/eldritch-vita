@@ -493,7 +493,16 @@ BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
 export OFILES_SRC	:=	$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
 export OFILES 	:= $(OFILES_SRC)
 
-all: $(APP_TITLE).velf
+all: $(APP_TITLE).vpk
+
+%.vpk: %.velf
+	vita-mksfoex -s TITLE_ID=ELDRITCH1 -d ATTRIBUTE2=12 "Eldritch" param.sfo
+	vita-pack-vpk -s param.sfo -b eboot.bin $@ \
+		-a livearea/icon0.png=sce_sys/icon0.png \
+		-a livearea/bg.png=sce_sys/livearea/contents/bg.png \
+		-a livearea/startup.png=sce_sys/livearea/contents/startup.png \
+		-a livearea/template.xml=sce_sys/livearea/contents/template.xml \
+		-a livearea/pic0.png=sce_sys/pic0.png
 
 %.velf: %.elf
 	cp $< $<.unstripped.elf
@@ -505,4 +514,4 @@ $(APP_TITLE).elf: $(OFILES)
 	$(CXX) $(CXXFLAGS) $^ $(LIBS) -o $@
 
 clean:
-	@rm -rf $(TARGET).velf $(TARGET).elf  $(OFILES)
+	@rm -rf $(APP_TITLE).velf $(APP_TITLE).elf $(APP_TITLE).vpk param.sfo eboot.bin $(OFILES)
