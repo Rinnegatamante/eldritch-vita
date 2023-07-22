@@ -181,7 +181,11 @@ extern int force_30fps;
 
 /*virtual*/ void GL2Renderer::SetVSync( const bool VSync )
 {
+#ifndef __vita__
+	const int SwapInterval = VSync ? 1 : 0;
+#else
 	const int SwapInterval = VSync ? (1 + force_30fps) : 0;
+#endif
 #if BUILD_WINDOWS_NO_SDL
 	wglSwapIntervalEXT( SwapInterval );
 #elif BUILD_SDL
