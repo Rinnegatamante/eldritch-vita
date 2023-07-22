@@ -461,7 +461,7 @@ CXX      = $(PREFIX)-g++
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 			-I$(CURDIR)/$(BUILD)
 
-CFLAGS	:=	-g -O3 -fno-strict-aliasing -fomit-frame-pointer -ffunction-sections -fno-lto \
+CFLAGS	:=	-g -Ofast -fno-strict-aliasing -fomit-frame-pointer -ffunction-sections -fno-lto \
 			-Wl,-q,--wrap,fopen,--wrap,sceIoMkdir,--wrap,opendir,--allow-multiple-definition \
 			-DHAVE_GLES $(DEFINES) $(INCLUDE) -fno-optimize-sibling-calls
 

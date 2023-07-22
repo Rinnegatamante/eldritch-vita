@@ -199,8 +199,11 @@ void Framework3D::Main()
 	}
 
 	STATICHASH( UseFixedFrameTime );
+#ifdef __vita__
+	m_UseFixedFrameTime	= ConfigManager::GetBool( sUseFixedFrameTime, false, sFramework );
+#else
 	m_UseFixedFrameTime	= ConfigManager::GetBool( sUseFixedFrameTime, true, sFramework );
-
+#endif
 	STATICHASH( FixedFrameTime );
 	m_FixedFrameTime = ConfigManager::GetFloat( sFixedFrameTime, 1.0f / 60.0f, sFramework );
 
@@ -870,7 +873,11 @@ void Framework3D::OnFixedFrameTimeChanged()
 {
 	STATICHASH( Framework );
 	STATICHASH( UseFixedFrameTime );
+#ifdef __vita__
+	m_UseFixedFrameTime	= ConfigManager::GetBool( sUseFixedFrameTime, false, sFramework );
+#else
 	m_UseFixedFrameTime	= ConfigManager::GetBool( sUseFixedFrameTime, true, sFramework );
+#endif
 }
 
 /*virtual*/ void Framework3D::SetResolution( const uint DisplayWidth, const uint DisplayHeight )

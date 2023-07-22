@@ -138,10 +138,8 @@ extern "C" int main( int argc, char* argv[] )
 	scePowerSetBusClockFrequency(222);
 	scePowerSetGpuClockFrequency(222);
 	scePowerSetGpuXbarClockFrequency(166);
-	sceSysmoduleLoadModule(SCE_SYSMODULE_RAZOR_CAPTURE);
 	vglSetSemanticBindingMode(VGL_MODE_SHADER_PAIR);
 	vglInitExtended(0, 960, 544, 8 * 1024 * 1024, SCE_GXM_MULTISAMPLE_4X);
-	sceIoMkdir("ux0:data/Eldritch/shaders", 0777);
 #endif
 #if BUILD_SWITCH
 	socketInitializeDefault();
