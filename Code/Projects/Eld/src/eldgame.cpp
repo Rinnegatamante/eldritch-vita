@@ -48,12 +48,29 @@ void patch_fname(char *fname) {
 	}
 }
 
+void *audio_buf = NULL;
+uint32_t audio_size;
+
 extern "C" FILE *__real_fopen(char *fname, char *mode);
 extern "C" FILE *__wrap_fopen(char *fname, char *mode) {
 	//printf("fopen %s\n", fname);
 	if (!strncmp(fname, "ux0:", 4)) {
 		return __real_fopen(fname, mode);
 	} else {
+		if (!strcmp("eldritch-audio.cpk", fname)) {
+			if (audio_buf == NULL) {
+				patch_fname(fname);
+				FILE *res = __real_fopen("ux0:data/Eldritch/eldritch-audio.cpk", mode);
+				fseek(res, 0, SEEK_END);
+				audio_size = ftell(res);
+				fseek(res, 0, SEEK_SET);
+				audio_buf = malloc(audio_size);
+				fread(audio_buf, 1, audio_size, res);
+				fseek(res, 0, SEEK_SET);
+				return res;
+			} else
+				return fmemopen(audio_buf, audio_size, mode);
+		}
 		patch_fname(fname);
 	}
 	return __real_fopen(patched_fname, mode);
