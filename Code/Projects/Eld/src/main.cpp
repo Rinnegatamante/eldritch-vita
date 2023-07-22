@@ -17,6 +17,7 @@
 #if BUILD_VITA
 #include <vitasdk.h>
 #include <vitaGL.h>
+int force_30fps = 0;
 #endif
 
 #if BUILD_MAC
@@ -140,6 +141,19 @@ extern "C" int main( int argc, char* argv[] )
 	scePowerSetGpuXbarClockFrequency(166);
 	vglSetSemanticBindingMode(VGL_MODE_SHADER_PAIR);
 	vglInitExtended(0, 960, 544, 8 * 1024 * 1024, SCE_GXM_MULTISAMPLE_4X);
+	
+	SceAppUtilInitParam init_param;
+	SceAppUtilBootParam boot_param;
+	memset(&init_param, 0, sizeof(SceAppUtilInitParam));
+	memset(&boot_param, 0, sizeof(SceAppUtilBootParam));
+	sceAppUtilInit(&init_param, &boot_param);
+	
+	SceAppUtilAppEventParam eventParam;
+	memset(&eventParam, 0, sizeof(SceAppUtilAppEventParam));
+	sceAppUtilReceiveAppEvent(&eventParam);
+	if (eventParam.type == 0x05) { // Game launched with 30 fps mode
+		force_30fps = 1;
+	}
 #endif
 #if BUILD_SWITCH
 	socketInitializeDefault();

@@ -472,7 +472,7 @@ CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++11
 ASFLAGS	:=	$(CFLAGS)
 
 LIBS	:= -lSDL2 -lvitaGL -lvitashark -lmathneon -lSceShaccCgExt -lSceShaccCg_stub -ltaihen_stub \
-	-lpthread -lSceAudio_stub -lSceAudioIn_stub -lSceHid_stub -lz -lScePower_stub \
+	-lpthread -lSceAudio_stub -lSceAudioIn_stub -lSceHid_stub -lz -lScePower_stub -lSceAppUtil_stub \
 	-lSceAppMgr_stub -lSceCommonDialog_stub -lSceCtrl_stub -lSceGxm_stub -lSceMotion_stub -lSceNet_stub \
 	-lSceTouch_stub -lSceSysmodule_stub -lSceKernelDmacMgr_stub -lSceDisplay_stub -lSceIme_stub
 

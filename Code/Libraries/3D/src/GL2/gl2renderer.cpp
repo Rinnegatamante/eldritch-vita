@@ -175,9 +175,13 @@ bool GL2Renderer::SupportsSM2()
 	return ERTF_Unknown;
 }
 
+#ifdef __vita__
+extern int force_30fps;
+#endif
+
 /*virtual*/ void GL2Renderer::SetVSync( const bool VSync )
 {
-	const int SwapInterval = VSync ? 1 : 0;
+	const int SwapInterval = VSync ? (1 + force_30fps) : 0;
 #if BUILD_WINDOWS_NO_SDL
 	wglSwapIntervalEXT( SwapInterval );
 #elif BUILD_SDL
