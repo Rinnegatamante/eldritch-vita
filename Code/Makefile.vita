@@ -474,7 +474,8 @@ ASFLAGS	:=	$(CFLAGS)
 LIBS	:= -lSDL2 -lvitaGL -lvitashark -lmathneon -lSceShaccCgExt -lSceShaccCg_stub -ltaihen_stub \
 	-lpthread -lSceAudio_stub -lSceAudioIn_stub -lSceHid_stub -lz -lScePower_stub -lSceAppUtil_stub \
 	-lSceAppMgr_stub -lSceCommonDialog_stub -lSceCtrl_stub -lSceGxm_stub -lSceMotion_stub -lSceNet_stub \
-	-lSceTouch_stub -lSceSysmodule_stub -lSceKernelDmacMgr_stub -lSceDisplay_stub -lSceIme_stub
+	-lSceTouch_stub -lSceSysmodule_stub -lSceKernelDmacMgr_stub -lSceDisplay_stub -lSceIme_stub \
+	-lSceNpTrophy_stub
 
 export OUTPUT	:=	$(CURDIR)/$(TARGET)
 export TOPDIR	:=	$(CURDIR)
@@ -502,7 +503,8 @@ all: $(APP_TITLE).vpk
 		-a livearea/bg.png=sce_sys/livearea/contents/bg.png \
 		-a livearea/startup.png=sce_sys/livearea/contents/startup.png \
 		-a livearea/template.xml=sce_sys/livearea/contents/template.xml \
-		-a livearea/pic0.png=sce_sys/pic0.png
+		-a livearea/pic0.png=sce_sys/pic0.png \
+		-a livearea/TROPHY.TRP=sce_sys/trophy/ELDR00001_00/TROPHY.TRP
 
 %.velf: %.elf
 	cp $< $<.unstripped.elf
