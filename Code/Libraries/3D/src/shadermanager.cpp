@@ -72,14 +72,12 @@ IShaderProgram* ShaderManager::GetShaderProgram( const SimpleString& VertexShade
 IVertexShader* ShaderManager::GetVertexShader( const SimpleString& Filename )
 {
 	const HashedString HashedFilename = Filename;
-#ifndef __vita__	
 	const Map<HashedString, IVertexShader*>::Iterator VSIter = m_VertexShaders.Search( HashedFilename );
 	if( VSIter.IsValid() )
 	{
 		return VSIter.GetValue();
 	}
 	else
-#endif
 	{
 		IVertexShader* const pVertexShader = m_Renderer->CreateVertexShader( Filename );
 		ASSERT( pVertexShader );
@@ -93,14 +91,12 @@ IVertexShader* ShaderManager::GetVertexShader( const SimpleString& Filename )
 IPixelShader* ShaderManager::GetPixelShader( const SimpleString& Filename )
 {
 	const HashedString HashedFilename = Filename;
-#ifndef __vita__
 	const Map<HashedString, IPixelShader*>::Iterator PSIter = m_PixelShaders.Search( HashedFilename );
 	if( PSIter.IsValid() )
 	{
 		return PSIter.GetValue();
 	}
 	else
-#endif
 	{
 		IPixelShader* const pPixelShader = m_Renderer->CreatePixelShader( Filename );
 		ASSERT( pPixelShader );

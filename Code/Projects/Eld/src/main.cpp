@@ -159,7 +159,7 @@ extern "C" int main( int argc, char* argv[] )
 	scePowerSetBusClockFrequency(222);
 	scePowerSetGpuClockFrequency(222);
 	scePowerSetGpuXbarClockFrequency(166);
-	vglSetSemanticBindingMode(VGL_MODE_SHADER_PAIR);
+	vglSetSemanticBindingMode(VGL_MODE_POSTPONED);
 	vglInitExtended(0, 960, 544, 8 * 1024 * 1024, SCE_GXM_MULTISAMPLE_4X);
 	
 	// Initing trophy system
