@@ -1,10 +1,20 @@
+# PSVita Readme
 Port of Eldritch for PSVITA based on official source code release with modifications from [usineur](https://github.com/usineur/Eldritch) and [ptitSeb](https://github.com/ptitSeb/Eldritch) that add GLES2 support and other minor bugfixes.
 Thanks to CatoTheYounger for testing the homebrew.
 
 Notes on compilation:
 vitaGL needs to be compiled with HAVE_GLSL_SUPPORT=1.
 
-Original Readme:
+## Installation Instructions
+
+- Install libshacccg.suprx (The fastest way to install it is by running this homebrew: https://vitadb.rinnegatamante.it/#/info/997)
+- Install the vpk of this port.
+- Gather your Eldritch data files (the game can be purchased in several stores, for example Steam)
+- Copy eldritch-audio.cpk, eldritch-base.cpk, eldritch-meshes.cpk, eldritch-textures.cpk and eldritch-world.cpk to ux0:data/Eldritch
+- Put prefs.cfg in ux0:data/Eldritch (this has a preset controls binding and optimal settings for performances).
+
+
+# Original Readme
 
 Thanks for downloading this distribution of Eldritch's source code!
 
