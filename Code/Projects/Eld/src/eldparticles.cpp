@@ -89,7 +89,11 @@ void EldParticles::GetCachedConfig( const SimpleString& DefinitionName )
 
 		STATICHASH( MaxParticles );
 		m_Params.m_MaxParticles = (uint)ConfigManager::GetInheritedInt( sMaxParticles, 1, sDefinitionName );
-
+#ifdef __vita__		
+		if (m_Params.m_MaxParticles > 15) {
+			m_Params.m_MaxParticles /= 2;
+		}
+#endif
 		STATICHASH( TextureMap );
 		m_Params.m_TextureMapName = ConfigManager::GetInheritedString( sTextureMap, DEFAULT_TEXTURE, sDefinitionName );
 
