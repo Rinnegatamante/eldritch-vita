@@ -45,6 +45,53 @@ static float				sReverbTest_Settings[]		= { 0.2f,	1.0f,	0.0f,	1.0f, };
 		PRINTF( "SoLoud: " #func ": 0x%08X\n", Result );	\
 	}
 
+int SoLoudAudioSystem::AudioWorkerEntry( SceSize args, void* argp )
+{
+	SoLoudAudioSystem* pSystem = *(SoLoudAudioSystem**)argp;
+	pSystem->AudioWorkerRun();
+	return sceKernelExitDeleteThread(0);
+}
+
+void SoLoudAudioSystem::AudioWorkerRun()
+{
+#ifdef __vita__
+	while( m_WorkerRunning )
+	{
+		sceKernelWaitSema( m_CommandSema, 1, NULL );
+
+		if( !m_WorkerRunning )
+			break;
+
+		SoLoudAudioCommand Cmd;
+		sceKernelLockMutex( m_CommandMutex, 1, NULL );
+		if( m_CommandQueue.Size() == 0 )
+		{
+			sceKernelUnlockMutex( m_CommandMutex, 1 );
+			continue;
+		}
+		Cmd = m_CommandQueue[ 0 ];
+		m_CommandQueue.Remove( 0 );
+		sceKernelUnlockMutex( m_CommandMutex, 1 );
+
+		ISoundInstance* pInstance = CreateSoundInstance( Cmd.m_DefinitionName );
+		if( !pInstance )
+			continue;
+
+		pInstance->SetBaseVolume( Cmd.m_VolumeOverride > 0.0f ? Cmd.m_VolumeOverride : 1.0f );
+		pInstance->SetLocation( Cmd.m_Location );
+
+		SoLoudAudioResult Result;
+		Result.m_Instance	   = pInstance;
+		Result.m_Location	   = Cmd.m_Location;
+		Result.m_VolumeOverride = Cmd.m_VolumeOverride;
+
+		sceKernelLockMutex( m_ResultMutex, 1, NULL );
+		m_ResultQueue.PushBack( Result );
+		sceKernelUnlockMutex( m_ResultMutex, 1 );
+	}
+#endif
+}
+
 SoLoudAudioSystem::SoLoudAudioSystem()
 :	m_SoLoudEngine( NULL )
 ,	m_SoLoudEchoBus( NULL )
@@ -72,6 +119,18 @@ SoLoudAudioSystem::SoLoudAudioSystem()
 				2048 /*buffer size; using SoLoud::Soloud::AUTO here defaults to 4096 for Windows APIs, which introduces noticeable latency*/,
 				2 /*channels*/ );
 	SOLOUD_ERROR_CHECK( init );
+
+#ifdef __vita__
+	m_WorkerRunning = true;
+
+	m_CommandMutex = sceKernelCreateMutex( "audio_cmd_mutex", 0, 0, NULL );
+	m_ResultMutex  = sceKernelCreateMutex( "audio_res_mutex", 0, 0, NULL );
+	m_CommandSema  = sceKernelCreateSema( "audio_cmd_sema", 0, 0, 0xFF, NULL );
+
+	SoLoudAudioSystem* pThis = this;
+	m_WorkerThreadId = sceKernelCreateThread( "audio_worker", AudioWorkerEntry, 0x10000100, 0x10000, 0, 0, NULL );
+	sceKernelStartThread( m_WorkerThreadId, sizeof( pThis ), &pThis );
+#endif
 
 	PRINTF( "SoLoud backend: %s\n", m_SoLoudEngine->getBackendString() );
 
@@ -109,6 +168,15 @@ SoLoudAudioSystem::SoLoudAudioSystem()
 
 SoLoudAudioSystem::~SoLoudAudioSystem()
 {
+#ifdef __vita__
+	m_WorkerRunning = false;
+	sceKernelSignalSema( m_CommandSema, 1 );
+	sceKernelWaitThreadEnd( m_WorkerThreadId, NULL, NULL );
+	sceKernelDeleteMutex( m_CommandMutex );
+	sceKernelDeleteMutex( m_ResultMutex );
+	sceKernelDeleteSema( m_CommandSema );
+#endif
+
 	// Free sound instances before deleting sound manager, else
 	// querying if sounds are streams when deleting instances will fail
 	FreeSoundInstances();
@@ -127,6 +195,7 @@ void SoLoudAudioSystem::Tick( const float DeltaTime, bool GamePaused )
 {
 	XTRACE_FUNCTION;
 
+	FlushReadyInstances();
 	AudioSystemCommon::Tick( DeltaTime, GamePaused );
 
 	//m_FMODSystem->update();
@@ -280,5 +349,45 @@ void SoLoudAudioSystem::SetPropCache( const HashedString& Filename, const SoLoud
 	ReverbTest_Print();
 	ReverbTest_Export();
 }
-
 #endif	// BUILD_DEV
+
+void SoLoudAudioSystem::EnqueueSound( const SimpleString& Def, const Vector& Location, float Volume )
+{
+#ifdef __vita__
+	SoLoudAudioCommand Cmd;
+	Cmd.m_DefinitionName = Def;
+	Cmd.m_Location	   = Location;
+	Cmd.m_VolumeOverride = Volume;
+
+	sceKernelLockMutex( m_CommandMutex, 1, NULL );
+	m_CommandQueue.PushBack( Cmd );
+	sceKernelUnlockMutex( m_CommandMutex, 1 );
+
+	sceKernelSignalSema( m_CommandSema, 1 );
+#else
+	ISoundInstance* pInstance = CreateSoundInstance( Def );
+	pInstance->SetBaseVolume( Volume > 0.0f ? Volume : 1.0f );
+	pInstance->SetLocation( Location );
+	ConditionalApplyReverb( pInstance );
+	pInstance->Tick();
+	pInstance->Play();
+#endif
+}
+
+void SoLoudAudioSystem::FlushReadyInstances()
+{
+#ifdef __vita__
+	sceKernelLockMutex( m_ResultMutex, 1, NULL );
+	Array<SoLoudAudioResult> Ready = m_ResultQueue;
+	m_ResultQueue.Clear();
+	sceKernelUnlockMutex( m_ResultMutex, 1 );
+
+	FOR_EACH_ARRAY( Iter, Ready, SoLoudAudioResult )
+	{
+		SoLoudAudioResult& R = Iter.GetValue();
+		ConditionalApplyReverb( R.m_Instance );
+		R.m_Instance->Tick();
+		R.m_Instance->Play();
+	}
+#endif
+}

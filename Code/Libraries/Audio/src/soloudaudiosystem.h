@@ -1,6 +1,10 @@
 #ifndef SOLOUDAUDIOSYSTEM_H
 #define SOLOUDAUDIOSYSTEM_H
 
+#ifdef __vita__
+#include <vitasdk.h>
+#endif
+
 #include "audiosystemcommon.h"
 #include "map.h"
 #include "set.h"
@@ -12,6 +16,20 @@
 
 #include "soloud.h"
 #include "soloud_echofilter.h"
+
+struct SoLoudAudioCommand
+{
+	SimpleString	m_DefinitionName;
+	Vector		  	m_Location;
+	float		   	m_VolumeOverride;
+};
+
+struct SoLoudAudioResult
+{
+	ISoundInstance* m_Instance;
+	Vector		  	m_Location;
+	float		   	m_VolumeOverride;
+};
 
 struct SoLoudPropCache
 {
@@ -38,7 +56,6 @@ public:
 	virtual ISoundInstance*	Play( const SimpleString& DefinitionName, const Vector& Location );
 	virtual void			SetReverbParams( const SimpleString& DefinitionName ) const;
 	virtual void			ConditionalApplyReverb( ISoundInstance* const pSoundInstance ) const { Unused( pSoundInstance ); /*not needed for SoLoud, all done with buses*/ }
-
 #if BUILD_DEV
 	virtual void			ReverbTest_Toggle();
 	virtual void			ReverbTest_Update();
@@ -58,7 +75,12 @@ public:
 
 	const SoLoudPropCache*	GetPropCache( const HashedString& Filename ) const;
 	void					SetPropCache( const HashedString& Filename, const SoLoudPropCache& PropCache );
-
+	void					EnqueueSound( const SimpleString& Def, const Vector& Location, float Volume );
+	void					FlushReadyInstances();
+	void					AudioWorkerRun();
+	
+	static int	  			AudioWorkerEntry( SceSize args, void* argp );
+	
 private:
 	void					ApplyReverb( const float EchoTime, const float DecayTime, const float LowPassFilter, const float WetDryMix ) const;
 
@@ -78,6 +100,17 @@ private:
 	bool				m_ReverbTest_IsActive;
 	uint				m_ReverbTest_SettingIndex;
 #endif
+
+#ifdef __vita__
+	SceUID		  		m_WorkerThreadId;
+	SceUID		  		m_CommandSema;
+	SceUID		  		m_CommandMutex;
+	SceUID		  		m_ResultMutex;
+#endif
+
+	bool						m_WorkerRunning;
+	Array<SoLoudAudioCommand>	m_CommandQueue;
+	Array<SoLoudAudioResult>	m_ResultQueue;
 };
 
 #endif // SOLOUDAUDIOSYSTEM_H

@@ -5,6 +5,7 @@
 #include "eldframework.h"
 #include "configmanager.h"
 #include "isoundinstance.h"
+#include "soloudaudiosystem.h"
 
 WBCompEldSound::WBCompEldSound()
 :	m_SoundInstances()
@@ -159,6 +160,9 @@ void WBCompEldSound::PlaySoundDef( const SimpleString& SoundDef, const Vector& L
 	}
 
 	IAudioSystem* const pAudioSystem = GetFramework()->GetAudioSystem();
+#ifdef __vita__
+    static_cast<SoLoudAudioSystem*>( pAudioSystem )->EnqueueSound( SoundDef, Location, VolumeOverride );
+#else
 	ISoundInstance* const pSoundInstance = pAudioSystem->CreateSoundInstance( SoundDef );
 	ASSERT( pSoundInstance );
 
@@ -171,6 +175,7 @@ void WBCompEldSound::PlaySoundDef( const SimpleString& SoundDef, const Vector& L
 	SSoundInstance& SoundInstance	= m_SoundInstances.PushBack();
 	SoundInstance.m_SoundInstance	= pSoundInstance;
 	SoundInstance.m_Attached		= Attached;
+#endif
 }
 
 /*static*/ void WBCompEldSound::InstanceDeleteCallback( void* pVoid, ISoundInstance* pInstance )
