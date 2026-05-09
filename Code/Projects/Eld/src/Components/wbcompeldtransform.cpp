@@ -141,6 +141,11 @@ void WBCompEldTransform::TickMotion( float DeltaTime )
 	XTRACE_FUNCTION;
 
 	DEVASSERT( m_CanMove );
+	
+	if( m_IsSettled && m_Acceleration.IsZero() )
+    {
+        return;
+    }
 
 	TickAcceleration( DeltaTime );
 

@@ -24,11 +24,11 @@ public:
 	void	MoveBy( const Vector& Offset );
 
 	Vector	GetVelocity() const { return m_Velocity; }
-	void	SetVelocity( const Vector& NewVelocity ) { m_Velocity = NewVelocity; }
-	void	ApplyImpulse( const Vector& Impulse ) { m_Velocity += Impulse; }
+	void	SetVelocity( const Vector& NewVelocity ) { if( !NewVelocity.IsZero() ) { m_IsSettled = false; } m_Velocity = NewVelocity; }
+	void	ApplyImpulse( const Vector& Impulse ) { m_IsSettled = false; m_Velocity += Impulse; }
 
 	Vector	GetAcceleration() const { return m_Acceleration; }
-	void	SetAcceleration( const Vector& NewAcceleration ) { m_Acceleration = NewAcceleration; }
+	void	SetAcceleration( const Vector& NewAcceleration ) { if( !NewAcceleration.IsZero() ) { m_IsSettled = false; } m_Acceleration = NewAcceleration; }
 
 	Angles	GetOrientation() const { return m_Orientation; }
 	void	SetOrientation( const Angles& NewOrientation );
